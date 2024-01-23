@@ -1,27 +1,29 @@
 import React, { memo, useEffect, useState } from 'react';
-import Spinner from 'react-native-loading-spinner-overlay';
-import * as WebBrowser from 'expo-web-browser';
 import Container from '../components/Container';
-import ListItem from './components/catalogScreen/ListItem';
 import { CustomScrollView } from '../components/CustomScrollView';
 import { getData } from '../components/data';
-import { IService } from '../constants/types';
+import { DotIndicator } from 'react-native-indicators';
+import { Colors } from '../constants/color';
+import { FlatList, Text, TouchableOpacity, View } from 'react-native';
 
 const PriceScreen = () => {
-  const [serviceData, setServicesData] = useState<IService[]>([]);
+  const [priceListData, setPriceListData] = useState<{data: {title: string; price: string}[]; header: string; show: boolean}[]>([]);
   const [loading, isLoading] = useState(false);
 
-  const dataLoad = () => {
+  const dataLoad = async () => {
     isLoading(true);
-    getData({ mainPath: 'main', documentPath: 'services' })
-      .then((resp) => {
-        setServicesData(resp[0]);
-        isLoading(false);
-      })
-      .catch((e) => {
-        isLoading(false);
-        console.log(e);
-      });
+    try {
+      const resp  = await getData({ documentPath: 'price' })
+      if (!!resp) {
+        setPriceListData(resp.data.map((it) => {
+          return {...it, show: false}
+        }));
+      }
+      isLoading(false);
+    }catch (e) {
+      isLoading(false);
+      console.log(e);
+    }
   };
 
   useEffect(() => {
@@ -31,20 +33,26 @@ const PriceScreen = () => {
   return (
     <Container>
       <CustomScrollView refreshing={loading} refresh={dataLoad}>
-        {serviceData.map((item) => (
-          <ListItem
-            key={item.id}
-            id={item.id}
-            title={item.title}
-            image={item.image}
-            disabled={true}
-            showDetailsButton={true}
-            pressDetailsButton={() => WebBrowser.openBrowserAsync(item.link)}
-            data={[]}
-          />
-        ))}
+        {loading ? (<DotIndicator count={3} size={6} color={Colors.gradientStart}/>) : (
+          <FlatList scrollEnabled={false} data={priceListData} renderItem={({item, index}) => {
+            return (
+              <View>
+                <TouchableOpacity style={{flexDirection: 'row'}}>
+                  <Text style={{flex: 1}}>{item.header}</Text>
+                </TouchableOpacity>
+                {!!item.show && item.data?.map((it) => {
+                  return (
+                    <View style={{flexDirection: 'row', justifyContent: 'space-between', backgroundColor: 'red'}}>
+                      <Text style={{flex: 1, textAlign: 'left'}}>{it.title}</Text>
+                      <Text style={{flex: 1, textAlign: 'right'}}>{it.price}</Text>
+                    </View>
+                  )
+                })}
+              </View>
+            )
+          }}/>
+          )}
       </CustomScrollView>
-      <Spinner visible={loading} />
     </Container>
   );
 };
