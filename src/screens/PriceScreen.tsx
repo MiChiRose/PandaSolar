@@ -1,57 +1,34 @@
 import React, { memo, useEffect, useState } from 'react';
-import Container from '../components/Container';
-import { CustomScrollView } from '../components/CustomScrollView';
-import { getData } from '../components/data';
-import { DotIndicator } from 'react-native-indicators';
-import { Colors } from '../constants/color';
-import { FlatList, Text, TouchableOpacity, View } from 'react-native';
+import PriceListComponent from '../atoms/price';
+import Container from '../components/container';
+import CustomScrollView from '../components/scrollView';
+import { PriceList } from '../constants/types';
+import { dataLoad, getData } from '../utils/data';
+import { mapPriceListData } from '../utils/mapData';
+import { onPriceRowPress } from '../utils/onPress';
 
 const PriceScreen = () => {
-  const [priceListData, setPriceListData] = useState<{data: {title: string; price: string}[]; header: string; show: boolean}[]>([]);
+  const [priceListData, setPriceListData] = useState<PriceList[]>([]);
   const [loading, isLoading] = useState(false);
 
-  const dataLoad = async () => {
-    isLoading(true);
-    try {
-      const resp  = await getData({ documentPath: 'price' })
-      if (!!resp) {
-        setPriceListData(resp.data.map((it) => {
-          return {...it, show: false}
-        }));
-      }
-      isLoading(false);
-    }catch (e) {
-      isLoading(false);
-      console.log(e);
-    }
+  const init = async () => {
+    const resp = await dataLoad({ path: 'price', isLoading });
+    resp && setPriceListData(resp.data.map(mapPriceListData));
   };
 
   useEffect(() => {
-    dataLoad();
+    init();
   }, []);
 
   return (
     <Container>
-      <CustomScrollView refreshing={loading} refresh={dataLoad}>
-        {loading ? (<DotIndicator count={3} size={6} color={Colors.gradientStart}/>) : (
-          <FlatList scrollEnabled={false} data={priceListData} renderItem={({item, index}) => {
-            return (
-              <View>
-                <TouchableOpacity style={{flexDirection: 'row'}}>
-                  <Text style={{flex: 1}}>{item.header}</Text>
-                </TouchableOpacity>
-                {!!item.show && item.data?.map((it) => {
-                  return (
-                    <View style={{flexDirection: 'row', justifyContent: 'space-between', backgroundColor: 'red'}}>
-                      <Text style={{flex: 1, textAlign: 'left'}}>{it.title}</Text>
-                      <Text style={{flex: 1, textAlign: 'right'}}>{it.price}</Text>
-                    </View>
-                  )
-                })}
-              </View>
-            )
-          }}/>
-          )}
+      <CustomScrollView loading={loading} refreshing={loading} refresh={init}>
+        <PriceListComponent
+          priceListData={priceListData}
+          onPriceRowPress={(index: number) =>
+            onPriceRowPress(index, priceListData, setPriceListData)
+          }
+        />
       </CustomScrollView>
     </Container>
   );
