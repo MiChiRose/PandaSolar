@@ -1,14 +1,13 @@
 import React, { memo, useEffect, useState } from 'react';
-import Container from '../components/Container';
-import { CustomScrollView } from '../components/CustomScrollView';
-import { getData } from '../components/data';
-import { DotIndicator } from 'react-native-indicators';
-import { Colors } from '../constants/color';
-import { FlatList, View, Image, Text } from 'react-native';
+import RulesComponent from '../atoms/rules';
+import CustomScrollView from '../components/scrollView';
+import Container from '../components/container';
+import { RulesType } from '../constants/types';
+import { getData } from '../utils/data';
 
 const RulesScreen = () => {
-  const [rules, setRules] = useState<{ image: string; text: string }[]>([]);
-  const [loading, isLoading] = useState(false);
+  const [rules, setRules] = useState<RulesType[]>([]);
+  const [loading, isLoading] = useState<boolean>(false);
 
   const dataLoad = async () => {
     isLoading(true);
@@ -30,30 +29,11 @@ const RulesScreen = () => {
 
   return (
     <Container>
-      <CustomScrollView refreshing={loading} refresh={dataLoad}>
-        {loading ? (
-          <DotIndicator count={3} size={6} color={Colors.gradientStart} />
-        ) : (
-          <FlatList
-            data={rules}
-            scrollEnabled={false}
-            ItemSeparatorComponent={() => <View style={{ marginVertical: 5 }} />}
-            renderItem={({ item, index }) => {
-              return (
-                <View style={{ flexDirection: 'row', columnGap: 10 }}>
-                  <Image
-                    source={{ uri: item.image }}
-                    style={{ height: 20, width: 20, marginRight: 10 }}
-                  />
-                  <Text style={{ flex: 1 }}>{item.text}</Text>
-                </View>
-              );
-            }}
-          />
-        )}
+      <CustomScrollView loading={loading} refreshing={loading} refresh={dataLoad}>
+        <RulesComponent rules={rules} />
       </CustomScrollView>
     </Container>
   );
 };
 
-export default RulesScreen;
+export default memo(RulesScreen);
