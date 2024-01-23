@@ -1,6 +1,6 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { DrawerNavigation } from './src/navigation/DrawerNavigation';
+import DrawerNavigation from './src/navigation';
 // import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 export default function App() {
