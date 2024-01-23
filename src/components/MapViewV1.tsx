@@ -2,10 +2,10 @@ import React from 'react';
 import MapView, { Marker } from 'react-native-maps';
 import { Platform } from 'react-native';
 
-export const MapViewBGTFixed = React.memo(() => {
+export const MapViewV1 = React.memo(() => {
   const region = {
-    latitude: 53.88319618614656,
-    longitude: 27.47913406993698,
+    latitude: 54.48329,
+    longitude: 26.382047,
     latitudeDelta: 0.001,
     longitudeDelta: Platform.OS === 'android' ? 0.0042 : 0.005,
   };

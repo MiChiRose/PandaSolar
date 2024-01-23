@@ -1,129 +1,131 @@
-import React from "react";
-import {Image, Platform, SafeAreaView, StyleSheet, TouchableOpacity} from "react-native";
-import {createDrawerNavigator, DrawerItemList} from "@react-navigation/drawer";
-import ServicesScreen from "../screens/ServicesScreen";
-import AboutInfoScreen from "../screens/AboutInfoScreen";
-import ContactsScreen from "../screens/ContactsScreen";
-import {NavigationContainer} from "@react-navigation/native";
-import {Gradient} from "../components/Gradient";
-import {Color} from "../constants/color";
-import {HomeNavigatorScreen} from "./HomeNavigatorScreen";
-import {CatalogNavigatorScreen} from "./CatalogNavigatorScreen";
-import {width} from "../constants/deviceParam";
+import React from 'react';
+import { Platform, SafeAreaView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createDrawerNavigator, DrawerItemList } from '@react-navigation/drawer';
+import ContactsScreen from '../screens/ContactsScreen';
+import PriceScreen from '../screens/PriceScreen';
+import GalleryScreen from '../screens/GalleryScreen';
+import RulesScreen from '../screens/RulesScreen';
+import { HomeNavigatorScreen } from './HomeNavigatorScreen';
+import { Gradient } from '../components/Gradient';
+import { width } from '../constants/deviceParam';
+import { Images } from '../constants/images';
+import { images } from '../../assets/images.connected';
+import { Colors } from '../constants/color';
 
 const Drawer = createDrawerNavigator();
 const screenWidth = width;
 const drawerWidth = screenWidth - 72;
 
+const LogoSVG = images[Images.logo];
+const DrawerSVG = images[Images.drawer];
+
 export const DrawerNavigation = () => {
-    return (
-        <NavigationContainer>
-            <Drawer.Navigator
-                initialRouteName="HomeMain"
-                screenOptions={({navigation}) => ({
-                    headerBackground: () => <Gradient style={styles.flex}/>,
-                    headerLeft: () => (
-                        <TouchableOpacity style={styles.drawerButton} onPress={() => navigation.toggleDrawer()}>
-                            <Image source={require("../../assets/drawer/drawer_white.png")}/>
-                        </TouchableOpacity>
-                    ),
-                    drawerStyle: {width: drawerWidth},
-                })}
-                drawerContent={(props) => {
-                    return (
-                        <Gradient style={styles.flex}>
-                            <SafeAreaView style={styles.container}>
-                                <Image
-                                    style={styles.drawerLogo}
-                                    source={require("../../assets/BTGLogo/belgaztechnika_new.png")}
-                                    resizeMode={"contain"}
-                                />
-                                <DrawerItemList {...props}/>
-                            </SafeAreaView>
-                        </Gradient>
-                    )
-                }}
-            >
-                <Drawer.Screen
-                    name="HomeMain"
-                    options={() => ({
-                        drawerLabel: "Главная",
-                        title: "",
-                        drawerLabelStyle: styles.drawerLabelStyle,
-                        headerTitleStyle: styles.titleStyle,
-                        headerShown: false,
-                    })}
-                    component={HomeNavigatorScreen}
-                />
-                <Drawer.Screen
-                    name="CatalogNavigator"
-                    options={() => ({
-                        drawerLabel: "Каталог",
-                        title: "Каталог",
-                        drawerLabelStyle: styles.drawerLabelStyle,
-                        headerTitleStyle: styles.titleStyle,
-                        headerShown: false
-                    })}
-                    component={CatalogNavigatorScreen}
-                />
-                <Drawer.Screen
-                    name="Service"
-                    options={{
-                        drawerLabel: "Услуги",
-                        title: "Услуги",
-                        drawerLabelStyle: styles.drawerLabelStyle,
-                        headerTitleStyle: styles.titleStyle
-                    }}
-                    component={ServicesScreen}
-                />
-                <Drawer.Screen
-                    name="AboutInfo"
-                    options={{
-                        drawerLabel: "О Предприятии",
-                        title: "О предприятии",
-                        drawerLabelStyle: styles.drawerLabelStyle,
-                        headerTitleStyle: styles.titleStyle
-                    }}
-                    component={AboutInfoScreen}
-                />
-                <Drawer.Screen
-                    name="Contacts"
-                    options={{
-                        drawerLabel: "Контакты",
-                        title: "Контакты",
-                        drawerLabelStyle: styles.drawerLabelStyle,
-                        headerTitleStyle: styles.titleStyle
-                    }}
-                    component={ContactsScreen}
-                />
-            </Drawer.Navigator>
-        </NavigationContainer>
-    );
-}
+  return (
+    <NavigationContainer>
+      <Drawer.Navigator
+        initialRouteName="HomeMain"
+        screenOptions={({ navigation }) => ({
+          headerShadowVisible: false,
+          headerLeft: () => (
+            <TouchableOpacity style={styles.drawerButton} onPress={() => navigation.toggleDrawer()}>
+              <DrawerSVG height={16} width={25} />
+            </TouchableOpacity>
+          ),
+          drawerStyle: { width: drawerWidth },
+        })}
+        drawerContent={(props) => {
+          return (
+            <Gradient style={styles.flex}>
+              <SafeAreaView style={styles.container}>
+                <View style={{ alignItems: 'center', marginBottom: 25 }}>
+                  <LogoSVG height={50} width={168} />
+                </View>
+                <DrawerItemList {...props} />
+              </SafeAreaView>
+            </Gradient>
+          );
+        }}
+      >
+        <Drawer.Screen
+          name="HomeMain"
+          options={() => ({
+            drawerLabel: 'Главная',
+            title: '',
+            drawerLabelStyle: styles.drawerLabelStyle,
+            headerTitleStyle: styles.titleStyle,
+            headerShown: false,
+          })}
+          component={HomeNavigatorScreen}
+        />
+        <Drawer.Screen
+          name="Rules"
+          options={() => ({
+            drawerLabel: 'Правила посещения',
+            title: 'Правила посещения',
+            drawerLabelStyle: styles.drawerLabelStyle,
+            headerTitleStyle: styles.titleStyle,
+          })}
+          component={RulesScreen}
+        />
+        <Drawer.Screen
+          name="Price"
+          options={{
+            drawerLabel: 'Прайс лист',
+            title: 'Прайс лист',
+            drawerLabelStyle: styles.drawerLabelStyle,
+            headerTitleStyle: styles.titleStyle,
+          }}
+          component={PriceScreen}
+        />
+        <Drawer.Screen
+          name="Gallery"
+          options={{
+            drawerLabel: 'Галерея',
+            title: 'Галерея',
+            drawerLabelStyle: styles.drawerLabelStyle,
+            headerTitleStyle: styles.titleStyle,
+          }}
+          component={GalleryScreen}
+        />
+        <Drawer.Screen
+          name="Contacts"
+          options={{
+            drawerLabel: 'Контакты',
+            title: 'Контакты',
+            drawerLabelStyle: styles.drawerLabelStyle,
+            headerTitleStyle: styles.titleStyle,
+          }}
+          component={ContactsScreen}
+        />
+      </Drawer.Navigator>
+    </NavigationContainer>
+  );
+};
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        marginLeft: 12,
-        marginTop: Platform.OS === "android" ? 30 : 0
-    },
-    drawerButton: {
-        paddingVertical: 12,
-        paddingLeft: 30,
-        paddingRight: 12
-    },
-    drawerLabelStyle: {
-        color: Color.white,
-        fontSize: 18,
-    },
-    drawerLogo: {
-        marginVertical: 30,
-        marginLeft: 10
-    },
-    titleStyle: {
-        color: Color.white,
-        fontSize: 20,
-        fontWeight: "700"
-    },
-    flex: {flex: 1}
-})
+  container: {
+    flex: 1,
+    marginLeft: 12,
+    marginTop: Platform.OS === 'android' ? 30 : 0,
+  },
+  drawerButton: {
+    paddingVertical: 12,
+    paddingLeft: 30,
+    paddingRight: 12,
+  },
+  drawerLabelStyle: {
+    color: Colors.white,
+    fontSize: 18,
+  },
+  drawerLogo: {
+    marginVertical: 30,
+    marginLeft: 10,
+  },
+  titleStyle: {
+    color: Colors.black,
+    fontSize: 20,
+    fontWeight: '700',
+  },
+  flex: { flex: 1 },
+});

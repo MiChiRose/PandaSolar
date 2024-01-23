@@ -1,15 +1,18 @@
 {
   "expo": {
-    "name": "Panda",
+    "name": "PandaSolar",
     "slug": "Panda",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/icon/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/splash/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
     },
     "assetBundlePatterns": [
       "**/*"
@@ -19,12 +22,26 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/icon/icon.png",
+        "backgroundColor": "#FFFFFF"
+      },
+      "package": "com.yurasf.panda",
+      "config": {
+        "googleMaps": { "apiKey": "AIzaSyBvQLZU1kS7V7HdsWssgpVCxq78TUDqHDU" }
       }
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "f02c0c2d-8559-4100-b00b-7a7aeb68509d"
+      }
+    },
+    "jsEngine": "hermes",
+    "ios": {
+      "jsEngine": "jsc"
+    },
+    "owner": "yurasf"
   }
 }
