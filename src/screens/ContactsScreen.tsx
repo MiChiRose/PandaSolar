@@ -5,6 +5,8 @@ import Container from '../components/container';
 import { MapViewV1 } from '../components/MapViewV1';
 import CustomScrollView from '../components/scrollView';
 import { dataLoad, getData } from '../utils/data';
+import { ContactsType } from '../constants/types';
+import { checkLink } from '../utils/checkLink';
 
 const ContactsScreen = (): React.JSX.Element => {
   const [fonts] = useFonts({
@@ -13,11 +15,7 @@ const ContactsScreen = (): React.JSX.Element => {
   });
 
   const [loading, isLoading] = useState(false);
-  const [contacts, setContacts] = useState({});
-
-  const checkLink = (link: string): boolean => {
-    return !!link && Linking.canOpenURL(link);
-  };
+  const [contacts, setContacts] = useState<ContactsType>({});
 
   const init = async () => {
     const resp = await dataLoad({ path: 'contacts', isLoading });
@@ -32,7 +30,7 @@ const ContactsScreen = (): React.JSX.Element => {
     <Container>
       <CustomScrollView refreshing={loading} refresh={init}>
         <MapViewV1 />
-        {Object.keys(contacts).length ? (
+        {Object.keys(contacts).length > 0 ? (
           <View style={{ marginVertical: 30 }}>
             <Text style={{ fontFamily: 'LatoBold', fontSize: 18 }}>{contacts.header}</Text>
             <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
