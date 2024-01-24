@@ -5,6 +5,8 @@ import CustomScrollView from '../components/scrollView';
 import { dataLoad, getData } from '../utils/data';
 import { width } from '../constants/deviceParam';
 
+const imageWidth = width / 2 - 20;
+
 const GalleryScreen = () => {
   const [gallery, setGallery] = useState<string[]>([]);
   const [loading, isLoading] = useState(false);
@@ -23,16 +25,24 @@ const GalleryScreen = () => {
       <CustomScrollView loading={loading} refreshing={loading} refresh={init}>
         <FlatList
           scrollEnabled={false}
-          numColumns={2}
           data={gallery}
-          ItemSeparatorComponent={() => <View style={{ marginVertical: 12 }} />}
+          horizontal={false}
+          numColumns={2}
+          ItemSeparatorComponent={() => <View style={{ marginVertical: 10 }} />}
           renderItem={({ item, index }) => {
             return (
-              <View key={index} style={{ height: width / 2, width: width / 2 - 20 }}>
-                <Image
-                  source={{ uri: item }}
-                  style={{ height: width / 2, width: width / 2 - 34 }}
-                />
+              <View
+                key={index}
+                style={[
+                  {
+                    height: width / 2,
+                    width: imageWidth,
+                  },
+                  { marginRight: index % 2 === 0 ? 5 : 0 },
+                  { marginLeft: index % 2 === 0 ? 0 : 5 },
+                ]}
+              >
+                <Image source={{ uri: item }} style={{ height: width / 2, width: imageWidth }} />
               </View>
             );
           }}

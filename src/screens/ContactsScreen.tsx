@@ -1,35 +1,104 @@
 import React, { memo, useEffect, useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { Image, Linking, Text, TouchableOpacity, View } from 'react-native';
+import { useFonts } from 'expo-font';
 import Container from '../components/container';
 import { MapViewV1 } from '../components/MapViewV1';
 import CustomScrollView from '../components/scrollView';
-import { getData } from '../utils/data';
+import { dataLoad, getData } from '../utils/data';
 
 const ContactsScreen = (): React.JSX.Element => {
-  const [loading, isLoading] = useState(false);
+  const [fonts] = useFonts({
+    Lato: require('../../assets/fonts/Lato-Regular.ttf'),
+    LatoBold: require('../../assets/fonts/Lato-Bold.ttf'),
+  });
 
-  const dataLoad = () => {
-    // isLoading(true);
-    // getData({ mainPath: 'main', documentPath: 'contacts' })
-    //   .then((resp) => {
-    //     // setAddressData(resp[0]);
-    //     // setContactsData(resp[1]);
-    //     isLoading(false);
-    //   })
-    //   .catch((e) => {
-    //     isLoading(false);
-    //     console.log(e);
-    //   });
+  const [loading, isLoading] = useState(false);
+  const [contacts, setContacts] = useState({});
+
+  const checkLink = (link: string): boolean => {
+    return !!link && Linking.canOpenURL(link);
+  };
+
+  const init = async () => {
+    const resp = await dataLoad({ path: 'contacts', isLoading });
+    resp && setContacts(resp.data);
   };
 
   useEffect(() => {
-    dataLoad();
+    init();
   }, []);
 
   return (
     <Container>
-      <CustomScrollView refreshing={loading} refresh={dataLoad}>
+      <CustomScrollView refreshing={loading} refresh={init}>
         <MapViewV1 />
+        {Object.keys(contacts).length ? (
+          <View style={{ marginVertical: 30 }}>
+            <Text style={{ fontFamily: 'LatoBold', fontSize: 18 }}>{contacts.header}</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
+              <Text style={{ fontFamily: 'Lato', fontSize: 16 }}>{contacts.phoneFirst.phone}</Text>
+              <Image
+                source={{ uri: contacts.phoneFirst.image }}
+                style={{ height: 25, width: 25, marginLeft: 12 }}
+              />
+            </View>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Text style={{ fontFamily: 'Lato', fontSize: 16 }}>{contacts.phoneSecond.phone}</Text>
+              <Image
+                source={{ uri: contacts.phoneSecond.image }}
+                style={{ height: 25, width: 88, marginLeft: 12 }}
+              />
+            </View>
+            <View style={{ marginVertical: 20 }}>
+              <Text style={{ fontFamily: 'LatoBold', fontSize: 18 }}>
+                {contacts.address.header}
+              </Text>
+              <View style={{ marginTop: 10 }}>
+                <Text style={{ fontFamily: 'Lato', fontSize: 16 }}>{contacts.address.address}</Text>
+              </View>
+            </View>
+            <View>
+              <Text style={{ fontFamily: 'LatoBold', fontSize: 18 }}>{contacts.social.header}</Text>
+              <View style={{ flexDirection: 'row', marginTop: 10 }}>
+                <TouchableOpacity
+                  onPress={() => {
+                    checkLink(contacts.social.instagram.link) &&
+                      Linking.openURL(contacts.social.instagram.link);
+                  }}
+                >
+                  <Image
+                    source={{ uri: contacts.social.instagram.image }}
+                    style={{ height: 32, width: 32 }}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{ marginHorizontal: 15 }}
+                  onPress={() => {
+                    checkLink(contacts.social.vk.link) && Linking.openURL(contacts.social.vk.link);
+                  }}
+                >
+                  <Image
+                    source={{ uri: contacts.social.vk.image }}
+                    style={{ height: 32, width: 32 }}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    checkLink(contacts.social.telegram.link) &&
+                      Linking.openURL(contacts.social.telegram.link);
+                  }}
+                >
+                  <Image
+                    source={{ uri: contacts.social.telegram.image }}
+                    style={{ height: 32, width: 32 }}
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        ) : (
+          <></>
+        )}
       </CustomScrollView>
     </Container>
   );
