@@ -3,33 +3,24 @@ import RulesComponent from '../atoms/rules';
 import CustomScrollView from '../components/scrollView';
 import Container from '../components/container';
 import { RulesType } from '../constants/types';
-import { getData } from '../utils/data';
+import { dataLoad } from '../utils/data';
 
 const RulesScreen = () => {
   const [rules, setRules] = useState<RulesType[]>([]);
   const [loading, isLoading] = useState<boolean>(false);
 
-  const dataLoad = async () => {
-    isLoading(true);
-    try {
-      const resp = await getData({ documentPath: 'rules' });
-      if (resp) {
-        setRules(resp.data);
-      }
-      isLoading(false);
-    } catch (e) {
-      isLoading(false);
-      console.log(e);
-    }
+  const init = async () => {
+    const resp = await dataLoad({ path: 'rules', isLoading });
+    resp && setRules(resp.data);
   };
 
   useEffect(() => {
-    dataLoad();
+    init();
   }, []);
 
   return (
     <Container>
-      <CustomScrollView loading={loading} refreshing={loading} refresh={dataLoad}>
+      <CustomScrollView loading={loading} refreshing={loading} refresh={init}>
         <RulesComponent rules={rules} />
       </CustomScrollView>
     </Container>

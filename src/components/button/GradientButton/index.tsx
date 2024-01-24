@@ -12,7 +12,7 @@ interface ButtonProps {
 const GradientButton = ({ text, onPress, style }: ButtonProps): React.JSX.Element => {
   return (
     <TouchableOpacity style={[styles.container, style]} onPress={onPress}>
-      <Gradient style={[styles.container, { paddingHorizontal: 25 }]}>
+      <Gradient style={[styles.container, { paddingHorizontal: 20 }]}>
         <Text style={styles.text}>{text}</Text>
       </Gradient>
     </TouchableOpacity>

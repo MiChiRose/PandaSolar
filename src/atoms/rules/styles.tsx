@@ -7,6 +7,7 @@ export default StyleSheet.create({
   itemContainer: {
     flexDirection: 'row',
     columnGap: 10,
+    alignItems: 'center',
   },
   image: {
     height: 20,
