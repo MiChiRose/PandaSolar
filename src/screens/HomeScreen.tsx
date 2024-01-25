@@ -127,7 +127,6 @@ const HomeScreen = () => {
           }
         />
 
-        <View>
           <FlatList
             data={newsData}
             scrollEnabled={false}
@@ -149,7 +148,6 @@ const HomeScreen = () => {
               );
             }}
           />
-        </View>
 
         {Object.keys(contacts).length > 0 ? (
           <View>
