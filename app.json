@@ -17,8 +17,10 @@
     "assetBundlePatterns": [
       "**/*"
     ],
+    "jsEngine": "hermes",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "jsEngine": "jsc"
     },
     "android": {
       "adaptiveIcon": {
@@ -27,7 +29,9 @@
       },
       "package": "com.yurasf.panda",
       "config": {
-        "googleMaps": { "apiKey": "AIzaSyBvQLZU1kS7V7HdsWssgpVCxq78TUDqHDU" }
+        "googleMaps": {
+          "apiKey": "AIzaSyBvQLZU1kS7V7HdsWssgpVCxq78TUDqHDU"
+        }
       }
     },
     "web": {
@@ -38,10 +42,10 @@
         "projectId": "f02c0c2d-8559-4100-b00b-7a7aeb68509d"
       }
     },
-    "jsEngine": "hermes",
-    "ios": {
-      "jsEngine": "jsc"
-    },
-    "owner": "yurasf"
+    "owner": "yurasf",
+    "plugins": [
+      "expo-router",
+      "expo-font"
+    ]
   }
 }
