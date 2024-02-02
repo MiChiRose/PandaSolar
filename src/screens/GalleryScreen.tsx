@@ -2,7 +2,7 @@ import React, { memo, useEffect, useState } from 'react';
 import { Image, FlatList, View } from 'react-native';
 import Container from '../components/container';
 import CustomScrollView from '../components/scrollView';
-import { dataLoad, getData } from '../utils/data';
+import { dataLoad } from '../utils/data';
 import { width } from '../constants/deviceParam';
 
 const imageWidth = width / 2 - 20;

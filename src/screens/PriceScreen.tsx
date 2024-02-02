@@ -3,7 +3,7 @@ import PriceListComponent from '../atoms/price';
 import Container from '../components/container';
 import CustomScrollView from '../components/scrollView';
 import { PriceList } from '../constants/types';
-import { dataLoad, getData } from '../utils/data';
+import { dataLoad } from '../utils/data';
 import { mapPriceListData } from '../utils/mapData';
 import { onPriceRowPress } from '../utils/onPress';
 
