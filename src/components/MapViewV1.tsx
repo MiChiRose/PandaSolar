@@ -1,25 +1,42 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import MapView, { Marker } from 'react-native-maps';
-import { Platform } from 'react-native';
+import { useIsFocused } from '@react-navigation/native';
+import { isAndroid, width } from '../constants/deviceParam';
 
-export const MapViewV1 = React.memo(() => {
+const height = width / 1.5;
+
+const MapViewV1 = ({markerTitle = '', markerDescription = ''}) => {
+  const isFocused = useIsFocused();
+  const mapRef = useRef<MapView>();
   const region = {
     latitude: 54.48329,
     longitude: 26.382047,
-    latitudeDelta: 0.001,
-    longitudeDelta: Platform.OS === 'android' ? 0.0042 : 0.005,
+    latitudeDelta: 0.004,
+    longitudeDelta: isAndroid() ? 0.0042 : 0.005,
   };
+
+  useEffect(() => {
+      mapRef.current?.animateToRegion(
+        region,
+        1000
+      );
+  }, [isFocused]);
 
   return (
     <MapView
+      ref={mapRef}
       pitchEnabled={false}
-      zoomEnabled={false}
-      scrollEnabled={false}
+      zoomEnabled={true}
+      scrollEnabled={true}
       rotateEnabled={false}
-      style={{ height: 200, width: '100%' }}
+      style={{ height: height, width: width - 40 }}
       region={region}
     >
-      <Marker coordinate={region} title={'Белгазтехника'} description={'ул.Гурского, д.30'} />
+      {(markerTitle || markerDescription) && (
+        <Marker coordinate={region} title={markerTitle} description={markerDescription} />
+      )}
     </MapView>
   );
-});
+};
+
+export default MapViewV1;
